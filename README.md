@@ -179,7 +179,7 @@ bun run dev
 
 - **GitHub**: [@AlphsX](https://github.com/AlphsX)
 - **Repository**: [Stockify API](https://github.com/AlphsX/Stockify-API)
-- **Documentation**: `localhost:3000/swagger` (Local)
+- **Documentation**: `localhost:3000/openapi` (Local)
 
 ---
 
