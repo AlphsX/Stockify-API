@@ -1,6 +1,6 @@
-# to-do-api
+# stockify-api
 
-REST API for **to-do-web**, built with [Bun](https://bun.sh), [Elysia](https://elysiajs.com), [Prisma](https://prisma.io), and [Supabase](https://supabase.com) (PostgreSQL).
+REST API for **stockify-web**, built with [Bun](https://bun.sh), [Elysia](https://elysiajs.com), [Prisma](https://prisma.io), and [Supabase](https://supabase.com) (PostgreSQL).
 
 ---
 
@@ -59,32 +59,51 @@ The API listens on <http://localhost:3000> by default.
 
 ## Endpoints
 
-| Method   | Path         | Description            |
-| -------- | ------------ | ---------------------- |
-| `GET`    | `/health`    | Health check           |
-| `GET`    | `/todos`     | List all todos         |
-| `GET`    | `/todos/:id` | Get a single todo      |
-| `POST`   | `/todos`     | Create a todo          |
-| `PATCH`  | `/todos/:id` | Update title/completed |
-| `DELETE` | `/todos/:id` | Delete a todo          |
+| Method   | Path                      | Description                                   |
+| -------- | ------------------------- | --------------------------------------------- |
+| `GET`    | `/health`                 | Health check                                  |
+| `GET`    | `/inventory`              | List all products (supports sorting & filter) |
+| `POST`   | `/inventory`              | Add new product into system                   |
+| `PATCH`  | `/inventory/:id/adjust`   | Adjust product quantity (+/- stock)           |
+| `DELETE` | `/inventory/:id`          | Delete product (allowed only if quantity is 0) |
 
 ### Request / Response examples
 
-**POST `/todos`**
+**GET `/inventory?low_stock=true`**
+- Filters products with `quantity <= 10`.
+- Default sorting: `name` (A-Z).
+
+**POST `/inventory`**
 
 ```json
 // body
-{ "title": "Buy groceries" }
+{
+  "name": "Mechanical Keyboard",
+  "sku": "KB-001",
+  "quantity": 50,
+  "zone": "A1"
+}
 
 // response 200
-{ "id": 1, "title": "Buy groceries", "completed": false, "createdAt": "...", "updatedAt": "..." }
+{
+  "id": "uuid-v4",
+  "name": "Mechanical Keyboard",
+  "sku": "KB-001",
+  "quantity": 50,
+  "zone": "A1",
+  "createdAt": "...",
+  "updatedAt": "..."
+}
 ```
 
-**PATCH `/todos/1`**
+**PATCH `/inventory/:id/adjust`**
 
 ```json
-// body (all fields optional)
-{ "completed": true }
+// body
+{ "change": -5 } // Means 5 items withdrawn
+
+// response 200 (updated product)
+{ ... "quantity": 45, ... }
 ```
 
 ---
@@ -97,4 +116,3 @@ The API listens on <http://localhost:3000> by default.
 | `DIRECT_URL`   | ✅       | —                      | Prisma direct connection string                      |
 | `PORT`         | ❌       | `3000`                 | Port the server listens on                           |
 | `CORS_ORIGIN`  | ❌       | localhost + Codespaces | Allowed CORS origin(s), `*`, or comma-separated list |
-# Stockify-API
