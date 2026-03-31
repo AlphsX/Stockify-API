@@ -14,14 +14,9 @@ export const inventoryRoutes = new Elysia({ prefix: "/inventory" })
     "/",
     async ({ query }) => {
       // TODO: implement
-      const {
-        low_stock = "all",
-        sortBy = "name",
-        sortOrder = "asc",
-      } = query;
+      const { low_stock = "all", sortBy = "name", sortOrder = "asc" } = query;
 
-      const where =
-        low_stock === "true" ? { quantity: { lte: 10 } } : {};
+      const where = low_stock === "true" ? { quantity: { lte: 10 } } : {};
 
       const products = await prisma.product.findMany({
         where,
@@ -36,11 +31,7 @@ export const inventoryRoutes = new Elysia({ prefix: "/inventory" })
       query: t.Object({
         // TODO: กำหนด schema สำหรับ low_stock, sortBy, sortOrder
         low_stock: t.Optional(
-          t.Union([
-            t.Literal("all"),
-            t.Literal("true"),
-            t.Literal("false"),
-          ]),
+          t.Union([t.Literal("all"), t.Literal("true"), t.Literal("false")]),
         ),
         sortBy: t.Optional(
           t.Union([
@@ -49,12 +40,7 @@ export const inventoryRoutes = new Elysia({ prefix: "/inventory" })
             t.Literal("quantity"),
           ]),
         ),
-        sortOrder: t.Optional(
-          t.Union([
-            t.Literal("asc"),
-            t.Literal("desc"),
-          ]),
-        ),
+        sortOrder: t.Optional(t.Union([t.Literal("asc"), t.Literal("desc")])),
       }),
     },
   )
